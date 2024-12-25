@@ -990,3 +990,23 @@ machine_at_m290_init(const machine_t *model)
     return ret;
 }
 #endif /* USE_OLIVETTI */
+
+int
+machine_at_pb300_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved("roms/machines/pb300/pb300.bin")
+                                0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+        return ret;
+// spoiler alert: i dont know how to code in C, thats why i left this thing in.
+    machine_at_common_init(model);
+    device_add(&keyboard_at_ncr_device);
+
+    if (fdc_current[0] == FDC_INTERNAL)
+        device_add(&fdc_at_device);
+
+    return ret;
+}
